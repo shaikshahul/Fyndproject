@@ -1,0 +1,19 @@
+{% if movie_obj %}
+{% for movie in movie_obj%}
+<tr id="tr_{{movie.id}}">
+    <td>{{movie.name}}</td>
+    <td>{{movie.director}}</td>
+    <td>{{movie.popularity}}</td>
+    <td>{{movie.score}}</td>   
+    <td>{{movie.genre}}</td>
+    <td data-value="{{movie.id}}"><a href="#" class="tooltipped movietooltip" data-position="bottom" data-delay="50"
+            data-tooltip="moviedetails"><i  class="material-icons dp48 get_movie" >mode_edit</i></a></td>
+    <td data-value="{{movie.id}}"><a href="#" class="tooltipped deletemovietooltip" data-position="bottom" data-delay="50"
+            data-tooltip="delete movie"><i class="material-icons dp48 delete_movie" >delete</i></a></td>
+</tr>
+{% endfor %}
+{% else %}
+<tr style="border:none">
+        <td colspan="7" class="center-align"><strong style="font-style: italic">No movies found.....</strong> </td>
+    </tr>
+{% endif %}

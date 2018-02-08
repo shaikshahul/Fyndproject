@@ -1,0 +1,12 @@
+Django==1.11.7
+MySQL-python==1.2.5
+social-auth-core
+social-auth-app-django
+requests==2.3
+toolz
+urllib3==1.22
+xhtml2pdf
+html5lib==1.0b8
+unidecode
+num2words
+djangorestframework==3.3.3

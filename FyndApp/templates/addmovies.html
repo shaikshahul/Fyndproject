@@ -1,0 +1,268 @@
+{% extends 'index.html' %} {% block content %}
+<section class="the-card">
+    <div class="row quick-links-head">
+        <div class="head">
+            <h1 class="zero-margin">Movies List </h1>
+        </div>
+        <div class="fixed-action-btn">
+            <a id="btnAddGroup" class="btn-floating btn-large waves-effect waves-light red">
+                <i class="material-icons">add</i>
+            </a>
+        </div>
+    </div>
+    <section id="quick-links-body" class="card-pad">
+        <div class="row z-depth-1">
+            <div class="row-pad">
+                <table class="bordered">
+                    <thead>
+                        <tr>
+                            <!--<th data-field="sno">S.No</th>-->
+                            <th data-field="Name">Movie Name</th>
+                            <th data-field="Director">Director</th>
+                            <th data-field="Popularity">Popularity</th>
+                            <th data-field="Score">Score</th>
+                            <th data-field="Genre">Genre</th>
+                            <!--<th data-field="Notes">SecondryEmail</th>-->
+                            <!--<th>Details</th>-->
+                            <!--<th>Delete</th>-->
+                        </tr>
+                    </thead>
+
+                    <tbody id="addmovies_obj">
+                            {%include '_partials/_addmovies.html' with movie_obj=moviesobj %}                              
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div id="moviesdiv">
+        <div class="row">
+            <div class="head">
+                <h1 class="zero-margin">Add Movies </h1>
+            </div>
+        </div>
+        <section class="card-pad emp-details-form top-80">
+            <div class="row z-depth-1">
+                <div class="row row-pad bottom-border zero-margin-bottom">
+                    <form id="MoviesForm" class="col s12" method="POST">{% csrf_token %}
+                        <div class="row-pad zero-margin-bottom">
+                            <input id="id_movieid" name="movieid" type="hidden" >
+                            <div class="row">
+                                <div class="col m12 s12 l6">
+                                    <div class="input-field col m12 s12 l12">
+                                        <input id="id_name" name="name" type="text" class="validate">
+                                        <label for="id_name">Movie Name</label>
+                                    </div>
+                                </div>
+                                <div class="col m12 s12 l6">
+                                    <div class="input-field col m12 s12 l12">
+                                        <input id="id_director" name="director" type="text" class="validate">
+                                        <label for="id_director">Director Name</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col m12 s12 l6">
+                                    <div class="input-field col m12 s12 l12">
+                                        <input id="id_popularity" name="popularity" type="number" class="validate" required>
+                                        <label for="id_popularity" >Popularity</label>
+                                    </div>
+                                </div>
+                                <div class="col m12 s12 l6" id="passwordtr">
+                                    <div class="input-field col m12 s12 l12">
+                                        <input id="id_score" name="score" type="number" class="validate">
+                                        <label for="id_score">Score</label>
+
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col m12 s12 l12">
+                                    <div class="input-field col m12 s12 l12">
+                                        <textarea type="text" id="id_genrc" name="genrc" class="materialize-textarea" rows="15" cols="100" ></textarea>
+                                        <label for="id_genrc" >Genrc</label>
+                                    </div>
+                                </div>                               
+                            </div>                                        
+                        
+                        </div>
+                        <div class="button-wrapper col m12 s12 l12">
+                            <a id="submit_movies" class="waves-effect waves-light btn secondry">Submit</a>
+                            <a class="waves-effect waves-light btn tertiary" id="cancel_movie" type="button">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</section>
+
+    <script>
+        $(window).on('load', function () {
+            $('#moviesdiv').hide()
+            $('.tooltipped').tooltip({
+                delay: 50
+            });
+        })
+
+
+        $('#btnAddGroup').on('click', function () {
+            $('#moviesdiv').show()
+            $('#submt').show()
+            $("form").trigger("reset")
+            $('.fixed-action-btn').hide()
+            $('#submit').prop("disabled", false)
+            Materialize.updateTextFields();
+            setTimeout(function () {
+                status
+                document.querySelector('#moviesdiv').scrollIntoView({
+                    behavior: 'smooth'
+                })
+            }, 100)
+
+        })
+
+        $('#cancel_movie').click(function () {
+            $('#moviesdiv').hide();
+            $('form').trigger('reset')
+            $('.fixed-action-btn').show()
+            Materialize.updateTextFields();
+
+        })
+
+        $('body').on('click', '#submit_user', function (e) {
+            debugger
+            e.preventDefault()
+            $('.pl').show()
+            $('.preloader-wrapper').addClass('active')
+            //   if($('#id_authen').val()){
+            $.ajax({
+                async: true,
+                url: '',
+                type: 'post',
+                data: $('#UserForm').serialize(),
+                success: function (data) {
+                    debugger
+                    $('.preloader-wrapper').removeClass('active')
+                    $('.pl').hide()
+                    if (data.errobj) {
+                        Materialize.toast(data.errobj, 2000)
+                    } else {
+                        $('#userdiv').hide()
+                        $('.fixed-action-btn').show()
+                         var editid = $("#id_userid").val()
+                         var objid = $("#id_obj").val()
+                        if (editid == '0') {
+                            $("#adduser_obj").append( data.usercontent);
+                        } else {
+                            $("#tr_" + editid).html("")
+                            $("#tr_" + editid).replaceWith( data.usercontent);
+                        }
+                        // addandupdateelement(data)
+                        $("#id_userid").val('0')
+                        $('#passwordtr').show()
+                        $(".usrpwd").removeClass('hide')
+                        Materialize.toast('User created successfully!!', 4000)
+                    }
+                },
+                error: function (data) {
+                    Materialize.toast('Failed to create user', 4000)
+                }
+            })
+        });
+
+        $('body').on('click', '.delete_user', function (e) {
+            e.preventDefault()
+            $('.pl').show()
+            $('.preloader-wrapper').addClass('active')
+            if (confirm('Are You Sure You Want To Delete This ?')) {
+
+                var userid = $(this).parent().parent().data('value')
+                $('.tooltipped').tooltip('remove');
+                $.ajax({
+                    async: true,
+                    url: $(this).parent().attr('href'),
+                    beforeSend: function (xhr) {
+                        xhr.overrideMimeType("application/json");
+                    }
+                }).done(function (data) {
+                    $('.preloader-wrapper').removeClass('active')
+                    $('.pl').hide()
+                    if (typeof data.status == 'undefined') {
+                        Materialize.toast('Unable to delete user!!', 2000)
+                        return false
+                    } else {
+                        $('#tr_' + userid).remove()
+                        Materialize.toast(data.status, 2000)
+                    }
+                })
+            } else {
+                return false
+            }
+        })
+
+        $('body').on('click', '.get_user', function (e) {
+            debugger
+            e.preventDefault()
+            $('.pl').show()
+            $('.preloader-wrapper').addClass('active')
+            var userid = $(this).parent().parent().data('value')
+            // $('.restpswdtooltip,.deleteusertooltip, .usertooltip').addClass('disableclick')
+            $('.tooltipped').tooltip('remove')
+            $.ajax({
+                async: true,
+                url: $(this).parent().attr('href'),
+                beforeSend: function (xhr) {
+                    xhr.overrideMimeType("application/json");
+                }
+            })
+                .done(function (data) {
+                    $('.preloader-wrapper').removeClass('active')
+                    $('.pl').hide()
+
+                    var userdata = $.parseJSON(data['edituserobj'])[0]
+                    var permsdata = $.parseJSON(data['grperms'])
+                    $('#userdiv').show()
+                    $('.fixed-action-btn').hide()
+                    // $('#statusstyle').css('margin-top','-38px')
+                    // $('#loginwithstyle').css('margin-top','15px')
+                    $(".usrpwd").addClass('hide')
+                    $("#id_userid").val(userdata.pk)
+                    $("#id_firstname").val(userdata.fields.first_name)
+                    $("#id_username").val(userdata.fields.username)
+                    if (userdata.fields.is_active == true) {
+                        $('#id_status').val('1')
+                    } else {
+                        $('#id_status').val('0')
+                    }
+                    $('select').material_select()
+                    $("#id_lastname").val(userdata.fields.last_name)
+                    if (permsdata != 0) {
+                        $("#id_role").val(permsdata[0].pk)
+                        $('select').material_select()
+                    }
+                    let user_ext = $.parseJSON(data.userext_obj)[0]
+                    var logintype = user_ext.fields.allowed_auths.split(',')
+                    $('#id_authen').find("option").each(function (index, data) {
+                        if (logintype.includes("" + index)) {
+                            data.selected = true
+                            $('select').material_select()
+                        } else {
+                            data.selected = false
+                        }
+                    })
+
+                    $('#passwordtr').hide()
+                    Materialize.updateTextFields();
+                    setTimeout(function () {
+                        document.querySelector('#userdiv').scrollIntoView({
+                            behavior: 'smooth'
+                        })
+                    }, 100)
+                })
+        })
+
+    </script>
+
+    {% endblock %}
