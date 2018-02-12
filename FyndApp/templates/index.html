@@ -4,7 +4,7 @@
 <html>
 
 <head>
-    <title>CP - Brio Customer Portal </title>
+    <title>GoFynd-Movies </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -118,41 +118,74 @@
 </head>
 
 <body>
+        {%include '_partials/_preloader.html' %}
     <div class="overlay">
         <header class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper">
                     <div class="logo-wrapper">
                         <div class="sprite-menu hamburger" style="margin-top:5px;">
-                            <a href="#" class="sprite"></a>
+                            <a href="#" class="sprite"></a>                            
                         </div>
-                       
-                        <span class="company-name hide-on-med-and-down">{# org.name #}</span>
-                    </div>
-                    {%if custname %}
-                    <span class="hide-on-med-and-down ">
-                         <strong class="company-name">
-                             <a href="#" id="indexcust">
-                                 {{custname}}
-                            </a>
-                        </strong>
-                    </span>
-                    {%endif%}
+                        <a href="{% url 'FyndApp:dashboard' %}" class="brand-logo">
+                            <img class="logo-img" src="/static/images/None/fynd_logo .png"
+                            style="max-width:150px;"></a>
 
+                        
+                        <span class="company-name hide-on-med-and-down">
+                                <div class="col m12 s12 l6">
+                                        <div class="input-field col m12 s12 l12">
+                                            <div class="autocomplete">
+                                                <div class="ac-input">
+                                                    <ul class="ac-scust ac-appender">
+                                                        <input type="text" name="txtsearch_moive" id="txtsearch_movie" 
+                                                        required data-activates="sourcemovies" style="width:500px;">
+                                                        <ul id="sourcemovies" class="dropdown-content ac-dropdown"></ul>
+                                                        <label for="txtsearch_movie">Search movies here.....</label>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!-- <button class="waves-effect waves-light btn" type="button" id="search_btn" name="search_btn">Go</button> -->
+
+                                        <!-- <div class="input-field col m12 s12 l3" style=" margin-top: 27px;"> -->
+                                             <!-- </div> -->
+                                    </div>
+                               
+                            
+                        </span>
+                    </div>
+                    
                     <ul id="nav-mobile" class="right">
-                        <li class="user-name">
+                            {% if not user.is_authenticated %}
+                            <li style="width:105px;padding-top:15px">
+                                <a href="{% url 'FyndApp:signup' %}">
+                                    <h2>Signup</h2>
+                                </a>
+                            </li>
+
+                            <li style="padding-top:15px">
+                                <a href="{% url 'FyndApp:login_user' %}">
+                                    <h2>Login</h2>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                        {% if user.is_authenticated %}
+                        <li class="user-name">                            
                             <a href="#">
                                 <div class="user-pic circle">
-                                    <img src="{%if request.session.profile_pic%}{{request.session.profile_pic}}{%else%}{{ STATIC_URL }}images/contacts/default.png{%endif%}" alt="user name">
+                                    <!-- <img src="{%if request.session.profile_pic%}{{request.session.profile_pic}}{%else%}{%endif%}" alt="user name"> -->
                                 </div>
                                 <h3 class="hide-on-med-and-down">Logged in as <span>{{ request.user.first_name }}</span>
                                 </h3>
                             </a>
                         </li>
-
                         <li class="sprite-logout">
-                            <a class="sprite" href="#"></a>
+                            <a class="sprite" href="{% url 'FyndApp:logout_user'%}"></a>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>
@@ -161,12 +194,16 @@
             <div class="row zero-margin-bottom pos">
                 <div class="side-navBar" id="right-nav">
                     <ul class="nav-ul zero-margin">
+                            {% if request.user.is_superuser %}
+
                                 <li>
-                            <a href="#" class="inline-flex" >
-                                <i class="material-icons icon_fix-1">person</i>
-                                <span class="icon_text_fix-1">Users</span>
+                            <a href="{% url 'FyndApp:movies' %}" class="inline-flex" >
+                                <i class="material-icons icon_fix-1">note_add</i>
+                                <span class="icon_text_fix-1">Add Movies</span>
                             </a>
                         </li>
+                        {% endif %}
+
                     </ul>
                 </div>
                 <div class="left-container margin-278" id="content-placeholder">
@@ -186,6 +223,61 @@
         $('li.hide-on-med-and-down:first').addClass('m-top-1')
        }
         Smooch.init({ appId: '57f53520b24654f600c022a9' })
+
+
+    movieSelect = $("#txtsearch_movie").materialize_autocomplete({
+            multiple: {
+                enable: false
+            },
+            appender: {
+                el: '.ac-scust'
+            },
+            dropdown: {
+                el: '#sourcemovies',
+                itemTemplate: '<li class="ac-scust" data-id="<%= item.id %>" data-text=\'<%= item.value %>\'><a ><%= item.value %>(<%= item.year %>)<br><span style="color:black;font-size: 13px;">\
+                    <%=item.director %> |<%= item.genre %> | <%= item.language %></span></a></li>'
+            },
+            showListOnFocus: false,
+            minLength: 1,
+            getData: function (value, callback) {
+                $('#sourcemovies').html('')
+                getMovies(value, callback);
+            },
+    
+            onSelect: function (item) {
+                debugger
+                url = '{% url "FyndApp:view_movies_deatils" pk=4%}'.replace('4',item.id)
+                window.location.href = url
+
+            }
+        })
+    
+    
+    
+        function getMovies(term, callback) {
+            var cache = {}
+            if (term in cache) {
+                response(cache[term]);
+                return;
+            }
+            $.ajax({
+                url: '{% url "FyndApp:search_movies" %}',
+                datatype: 'json',
+                method: 'GET',
+                data: {
+                    'term': term
+                },
+                success: function (data) {
+                    debugger
+                    if (typeof data.error != 'undefined') {
+                        console.log('invalid search')
+                        data = []
+                    }
+                    callback(term, JSON.parse(data))
+                }
+            })
+        }
+    
     </script>
 
 </body>

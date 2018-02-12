@@ -44,9 +44,9 @@
         </div>
         <section class="card-pad emp-details-form top-80">
             <div class="row z-depth-1">
-                <div class="row row-pad bottom-border zero-margin-bottom">
-                    <form id="MoviesForm" class="col s12" method="POST">{% csrf_token %}
-                        <div class="row-pad zero-margin-bottom">
+                <!-- <div class="row row-pad bottom-border zero-margin-bottom"> -->
+                    <form id="MoviesForm" class="col s12" method="POST" enctype="multipart/form-data" >{% csrf_token %}
+                        <div class="zero-margin-bottom" style="margin-top:30px;">
                             <input id="id_movieid" name="movieid" type="hidden" >
                             <div class="row">
                                 <div class="col m12 s12 l6">
@@ -70,33 +70,81 @@
                                         <label for="id_popularity" >Popularity</label>
                                     </div>
                                 </div>
-                                <div class="col m12 s12 l6" id="passwordtr">
+                                <div class="col m12 s12 l6">
                                     <div class="input-field col m12 s12 l12">
-                                        <input id="id_score" name="score" type="number" class="validate">
+                                        <input id="id_score" name="score" type="number" step="0.01">
                                         <label for="id_score">Score</label>
-
                                     </div>
                                 </div>
                             </div>
                              <div class="row">
-                                <div class="col m12 s12 l12">
+                                <div class="col m12 s12 l6">
                                     <div class="input-field col m12 s12 l12">
-                                        <textarea type="text" id="id_genrc" name="genrc" class="materialize-textarea" rows="15" cols="100" ></textarea>
-                                        <label for="id_genrc" >Genrc</label>
+                                        <input type="text" id="id_genrc" name="genre" class="validate" >
+                                        <label for="id_genrc" >Genre</label>
                                     </div>
-                                </div>                               
-                            </div>                                        
+                                </div>
+                                <div class="col m12 s12 l6">
+                                        <div class="input-field col m12 s12 l12">
+                                            <input type="text" id="id_releasedate" name="releasedate" class="datepicker" >
+                                            <label for="id_releasedate" >Release Date</label>
+                                        </div>
+                                    </div>
+                                </div>                                        
                         
+                            <div class="row">
+                                    <div class="col m12 s12 l6">
+                                        <div class="input-field col m12 s12 l12">
+                                            <input type="text" id="id_language" name="language" class="validate" >
+                                            <label for="id_language" >Language</label>
+                                        </div>
+                                    </div>
+                                    <div class="col m12 s12 l6">
+                                            <div class="input-field col m12 s12 l12">
+                                                <input type="text" id="id_country" name="country" >
+                                                <label for="id_country" >Country</label>
+                                            </div>
+                                        </div>
+                                </div> 
+                                <div class="row">
+                                        <div class="col m12 s12 l6">
+                                                <div class="input-field col m12 s12 l12">
+                                                  <div class="file-field input-field">
+                                                    <div class="btn" style="padding-top: 0.4rem;width: 120px">
+                                                      <span>Upload Image</span>
+                                                      <input type="file" id="id_image" name="image" accept="image/x-png,image/jpeg">
+                                                    </div>
+                                                    <div class="file-path-wrapper">
+                                                      <input class="file-path validate" type="text">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col m12 s12 l6">
+                                                    <div class="input-field col m12 s12 l12">
+                                                        <input type="text" id="id_video" name="youtube" class="validate" >
+                                                        <label for="id_video" >Trailer Url(youtube url only)</label>
+                                                    </div>
+                                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m12 s12 l12">
+                                        <div class="input-field col m12 s12 l12">
+                                            <textarea type="text" id="id_storyline" name="storyline" class="materialize-textarea" ></textarea>
+                                            <label for="id_storyline" >StoryLine</label>
+                                        </div>
+                                    </div>
+                                </div>  
+                        <div class="col m12 s12 l12">
+                            <button id="submit_movies" type="submit" class="waves-effect waves-light btn secondry">Submit</button>
+                            <button class="waves-effect waves-light btn tertiary" id="cancel_movie" type="button">Cancel</button>
                         </div>
-                        <div class="button-wrapper col m12 s12 l12">
-                            <a id="submit_movies" class="waves-effect waves-light btn secondry">Submit</a>
-                            <a class="waves-effect waves-light btn tertiary" id="cancel_movie" type="button">Cancel</a>
-                        </div>
+                    </div>
                     </form>
-                </div>
+                <!-- </div> -->
             </div>
-    </div>
 </section>
+</div>
 
     <script>
         $(window).on('load', function () {
@@ -113,6 +161,7 @@
             $("form").trigger("reset")
             $('.fixed-action-btn').hide()
             $('#submit').prop("disabled", false)
+            $('#submit_movies').text('Submit')
             Materialize.updateTextFields();
             setTimeout(function () {
                 status
@@ -127,52 +176,12 @@
             $('#moviesdiv').hide();
             $('form').trigger('reset')
             $('.fixed-action-btn').show()
+            $('#submit_movies').text('Submit')
             Materialize.updateTextFields();
 
         })
 
-        $('body').on('click', '#submit_user', function (e) {
-            debugger
-            e.preventDefault()
-            $('.pl').show()
-            $('.preloader-wrapper').addClass('active')
-            //   if($('#id_authen').val()){
-            $.ajax({
-                async: true,
-                url: '',
-                type: 'post',
-                data: $('#UserForm').serialize(),
-                success: function (data) {
-                    debugger
-                    $('.preloader-wrapper').removeClass('active')
-                    $('.pl').hide()
-                    if (data.errobj) {
-                        Materialize.toast(data.errobj, 2000)
-                    } else {
-                        $('#userdiv').hide()
-                        $('.fixed-action-btn').show()
-                         var editid = $("#id_userid").val()
-                         var objid = $("#id_obj").val()
-                        if (editid == '0') {
-                            $("#adduser_obj").append( data.usercontent);
-                        } else {
-                            $("#tr_" + editid).html("")
-                            $("#tr_" + editid).replaceWith( data.usercontent);
-                        }
-                        // addandupdateelement(data)
-                        $("#id_userid").val('0')
-                        $('#passwordtr').show()
-                        $(".usrpwd").removeClass('hide')
-                        Materialize.toast('User created successfully!!', 4000)
-                    }
-                },
-                error: function (data) {
-                    Materialize.toast('Failed to create user', 4000)
-                }
-            })
-        });
-
-        $('body').on('click', '.delete_user', function (e) {
+        $('body').on('click', '.delete_movie', function (e) {
             e.preventDefault()
             $('.pl').show()
             $('.preloader-wrapper').addClass('active')
@@ -202,67 +211,93 @@
             }
         })
 
-        $('body').on('click', '.get_user', function (e) {
+        $('#MoviesForm').submit(function(e){
             debugger
             e.preventDefault()
+            form = $('#MoviesForm')
+            var formdata = new FormData(form[0])
             $('.pl').show()
             $('.preloader-wrapper').addClass('active')
-            var userid = $(this).parent().parent().data('value')
-            // $('.restpswdtooltip,.deleteusertooltip, .usertooltip').addClass('disableclick')
-            $('.tooltipped').tooltip('remove')
-            $.ajax({
-                async: true,
-                url: $(this).parent().attr('href'),
-                beforeSend: function (xhr) {
-                    xhr.overrideMimeType("application/json");
+        $.ajax({
+            url  :'{% url "FyndApp:movies" %}',
+            type: "POST",
+            data: formdata,
+            mimeTypes:"multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data){
+                debugger
+                var movieobj = data.moviobj
+                if($('#tr_'+movieobj).length == 0){
+                    $('#addmovies_obj').append(data['movie_content'])
+                }else{
+                    $("#tr_" + movieobj).html('')
+                    $("#tr_" + movieobj).replaceWith(data['movie_content']);
                 }
-            })
-                .done(function (data) {
-                    $('.preloader-wrapper').removeClass('active')
-                    $('.pl').hide()
+                $('#cancel_movie').trigger('click')
+                $('#submit_movies').text('Submit')
+                $('#id_movieid').val('')
+                $('.preloader-wrapper').removeClass('active')
+                $('.pl').fadeOut('slow') 
 
-                    var userdata = $.parseJSON(data['edituserobj'])[0]
-                    var permsdata = $.parseJSON(data['grperms'])
-                    $('#userdiv').show()
-                    $('.fixed-action-btn').hide()
-                    // $('#statusstyle').css('margin-top','-38px')
-                    // $('#loginwithstyle').css('margin-top','15px')
-                    $(".usrpwd").addClass('hide')
-                    $("#id_userid").val(userdata.pk)
-                    $("#id_firstname").val(userdata.fields.first_name)
-                    $("#id_username").val(userdata.fields.username)
-                    if (userdata.fields.is_active == true) {
-                        $('#id_status').val('1')
-                    } else {
-                        $('#id_status').val('0')
-                    }
-                    $('select').material_select()
-                    $("#id_lastname").val(userdata.fields.last_name)
-                    if (permsdata != 0) {
-                        $("#id_role").val(permsdata[0].pk)
-                        $('select').material_select()
-                    }
-                    let user_ext = $.parseJSON(data.userext_obj)[0]
-                    var logintype = user_ext.fields.allowed_auths.split(',')
-                    $('#id_authen').find("option").each(function (index, data) {
-                        if (logintype.includes("" + index)) {
-                            data.selected = true
-                            $('select').material_select()
-                        } else {
-                            data.selected = false
-                        }
+            Materialize.toast("Data Uploaded Successfully", 4000)
+            },
+            error: function(data){
+              Materialize.toast('Failed to upload data', 20000)
+              $('.validate').val('')
+              $('.preloader-wrapper').removeClass('active')
+              $('.pl').fadeOut('slow')
+            }
+          })
+       })
+
+       $('body').on('click', '.movie_edit', function () {
+        debugger
+        $('.pl').show()
+        $('.preloader-wrapper').addClass('active')
+        $('#btnAddGroup').hide();     
+        var idd = $(this).closest('td').data('value')
+        url = '{% url "FyndApp:movie_edit" 3 %}'.replace('3', idd)
+        $.ajax({
+            url: url,
+            datatype: 'json',
+            method: 'GET',
+            success: function (data) {
+                debugger
+                datobj = JSON.parse(data.editobj)[0]
+                movobj = datobj.fields                
+                $('#id_movieid').val(datobj.pk)
+                $('#moviesdiv').show()
+                $('#submit_movies').text('Update')
+                $('#id_name').val(movobj.name)
+                $('#id_director').val(movobj.director)
+                $('#id_popularity').val(movobj.popularity)
+                $('#id_score').val(movobj.score)
+                $('#id_genrc').val(movobj.genre)
+                $('#id_releasedate').val(movobj.release_date)
+                $('#id_language').val(movobj.language)
+                $('#id_country').val(movobj.country)
+                $('#id_video').val(movobj.youtube)
+                $('#id_storyline').val(movobj.storyline)     
+                Materialize.updateTextFields(); 
+                setTimeout(function () {
+                    status
+                    document.querySelector('#moviesdiv').scrollIntoView({
+                        behavior: 'smooth'
                     })
+                }, 100)
+              
+                $('.preloader-wrapper').removeClass('active')
+                $('.pl').hide()
 
-                    $('#passwordtr').hide()
-                    Materialize.updateTextFields();
-                    setTimeout(function () {
-                        document.querySelector('#userdiv').scrollIntoView({
-                            behavior: 'smooth'
-                        })
-                    }, 100)
-                })
+
+            }
         })
 
+    });
+
+       
     </script>
 
     {% endblock %}

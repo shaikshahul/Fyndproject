@@ -1,0 +1,107 @@
+{% extends 'index.html' %} {% block content %}
+<div class="col s12 m12 l12 ">
+  <div class="row" style="background-color:#333">
+    <br>
+    <div class="card-title left-align">
+            <div class="col s12 m12 l7">
+                    <h2 style="font-size:40px;">{{movieobj.name}}({{movieobj.release_date|date:'Y'}})</h2> 
+                    <span>1h 30min</span>|<span> {{movieobj.genre}}</span>|<span>   {{movieobj.release_date|date:'d M Y'}} ({{movieobj.country}})</span>
+
+                </div>
+                 <div class="col s12 m12 l1" style="text-align: right !important;">
+                        <h2 style="font-size:25px;">{{movieobj.score}}/10</h2>
+                     </div>
+            <!-- <div class="row"> -->
+            <!-- </div> -->
+    </div>
+    
+    <div class="col s12 m12 l2 ">
+      <section class="card-content " style="height:287px;">
+            <img class="responsive-img" src="/static/images/{{movieobj.image}}" style="width:215px;height:286px;">
+      </section>
+    </div>
+    <div class="col s12 m12 l6 ">
+            <section class="card-content ">
+                    <div class="video-container">
+                            <iframe width="853" height="400  " 
+                    src="{{movieobj.youtube}}" frameborder="0" allowfullscreen ></iframe>
+                          </div>
+
+            </section>
+    </div>
+    <div class="col s12 m12 l4"></div>
+        
+  </div>
+  <div class="col s12 m12 l8">
+  <div class="row">
+      <div class="col s12 m12 l12">
+            Director: <a href="#">{{movieobj.director}}</a>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col s12 m12 l12">
+            Writers: <a href="#">
+                    Dorothy Blyskal (screenplay by)
+            </a>
+      </div>
+  </div>
+  <div class="row">
+        <div class="col s12 m12 l12">
+                Stars: <a href="#">
+                        Alek Skarlatos, Anthony Sadler, Spencer Stone
+                </a>
+        </div>
+    </div>  
+<div class="row">
+        <div class="col s12 m12 l12">
+                <h2>Storyline</h2>
+        </div>
+    </div>  
+<div class="row">
+        <div class="col s12 m12 l12">
+            {{movieobj.storyline}}
+        </div>
+    </div> 
+    </div> 
+
+
+
+
+<style>
+  .card-pad,
+  .card-content {
+    background-color: white;
+  }
+
+  .card-title {
+    background-color: #333;
+    height: 90px;
+    padding: 15px 0px 0px 10px;
+    color:white;
+    margin-left: 12px;
+  }
+
+  .card-content {
+    width: auto;
+    height: 227px;
+  }
+
+  h1 {
+    padding-top: 20px;
+  }
+  container iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80% !important;
+    height: 79% !important;
+}
+
+  
+</style>
+<script>
+        $(document).ready(function(){
+            $('.carousel').carousel();
+          });
+</script>
+{% endblock %}

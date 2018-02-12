@@ -1,0 +1,77 @@
+{% extends 'index.html' %} {% block content %}
+<div class="col s12 m12 l12 ">
+    <div class='row-pad messagebox'>
+        <div class='col s12' style="margin-bottom: 20px;">
+            <p class="center-align" id="message"></p>
+        </div>
+    </div>
+
+  <div class="row">
+    <br>
+    <div class="col s12 m12 l6 ">
+      <div class="card-title left-align">
+        <h2>Upcoming Movies</h2>
+      </div>
+      <section class="card-content ">
+            <div class="carousel">
+                    {% for upcoming in upcomobj%}
+                    <a class="carousel-item" href="{% url 'FyndApp:view_movies_deatils' pk=upcoming.id %}"><img src="static/images/{{upcoming.image}}"></a>
+                    {% endfor %}
+            </div>
+      </section>
+    </div>
+    <div class="col s12 m12 l6 ">
+            <div class="card-title left-align">
+              <h2>Now Playing (Box Office)</h2>
+            </div>
+            <section class="card-content ">
+                  <div class="carousel">
+                        {% for nowplay in nowplayobj%}
+                        <a class="carousel-item" href="{% url 'FyndApp:view_movies_deatils' pk=nowplay.id %}"><img src="static/images/{{nowplay.image}}"></a>
+                        {% endfor %}
+                  </div>
+            </section>
+          </div>
+  </div>
+</div>
+
+
+
+<style>
+  .card-pad,
+  .card-content {
+    background-color: white;
+  }
+
+  .card-title {
+    background-color: ghostwhite;
+    height: 45px;
+    padding: 15px 0px 0px 10px;
+  }
+
+  .card-content {
+    width: auto;
+    height: 400px;
+  }
+
+  h1 {
+    padding-top: 20px;
+  }
+
+
+  
+</style>
+<script>
+        $(document).ready(function(){
+            $('.carousel').carousel();
+          });
+          
+          {% if messages %}
+          {% for msg in messages %}
+              $('#message').html('{{msg}}').addClass('{{msg.tags}}')
+              Materialize.toast('{{msg}}', 5000)
+          {% endfor %}
+      {% endif %}
+  
+</script>
+{% endblock %}

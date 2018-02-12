@@ -1,0 +1,349 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <script src="{% static 'js/security.js' %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery-3.2.1.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/materialize.min.js" %}"></script>
+    <!--Import materialize.css-->
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/materialize.min.css" %}" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="{% static "css/materializestyle.css" %}" />
+
+    <style>
+        .error {
+            color: #e53935
+        }
+
+        .success {
+            color: #4caf50
+        }
+        .loginbody{
+            background-repeat: no-repeat;
+            background-size: cover
+        }
+
+        @media(min-width: 360px)and (max-width: 384px) {
+            .centered {
+                position: inherit;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 25%;
+            }
+        }
+
+        @media(min-width: 385px) and (max-width: 411px) {
+            .centered {
+                position: inherit;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 15%;
+            }
+        }
+
+        @media(min-width: 412px) and (max-width: 419px) {
+            .centered {
+                position: inherit;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 30%;
+            }
+        }
+
+        @media(min-width: 420px) and (max-width: 600px) {
+            .centered {
+                position: inherit;
+                width: 60%;
+                padding-top: 45%;
+                margin: 0 auto;
+            }
+        }
+
+        @media(min-width: 601px)and (max-width: 799px) {
+            .centered {
+                position: absolute;
+                top: 20%;
+                left: 50%;
+                padding-top: initial;
+                transform: translateY(-50%);
+                transform: translateX(-50%);
+            }
+        }
+
+        @media(min-width: 800px) {
+            .centered {
+                position: absolute;
+                top: 20%;
+                left: 50%;
+                padding-top: initial;
+                transform: translateY(-50%);
+                transform: translateX(-50%);
+            }
+        }
+
+        @media only screen and (min-width: 990px) {
+            .centered {
+                position: inherit;
+                margin: 0 auto;
+                width: 32%;
+                padding-top: 5%;
+                max-height: 30%;
+                transform: inherit;
+                padding-bottom: 3%;
+
+            }
+        }
+        /*Fixing the background */
+
+        html {
+            /*position: fixed; */
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .label-align {
+            margin-left: -12px;
+        }
+
+        .h4 {
+            font-size: 1em;
+            margin: 1.33em 0;
+        }
+
+        body {
+            background-color: inherit
+        }
+
+        .messagebox {
+            padding-top: 10px
+        }
+
+        {% if showcaptcha %}
+
+        .recaptcha-wrapper {
+            overflow: hidden;
+            background-color: #F9F9F9;
+            border-radius: 3px;
+            box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.08);
+            -webkit-box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.08);
+            -moz-box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.08);
+            height: 70px;
+            position: relative;
+            margin-top: 17px;
+            border: 1px solid #d3d3d3;
+            color: #000;
+        }
+
+        .recaptcha-info {
+            background-size: 32px;
+            height: 32px;
+            margin: 0 13px 0 13px;
+            position: absolute;
+            right: 8px;
+            top: 9px;
+            width: 32px;
+            background-image: url(https://www.gstatic.com/recaptcha/api2/logo_48.png);
+            background-repeat: no-repeat;
+        }
+
+        .rc-anchor-logo-text {
+            color: #9b9b9b;
+            cursor: default;
+            font-family: Roboto, helvetica, arial, sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            line-height: 10px;
+            margin-top: 5px;
+            text-align: center;
+            position: absolute;
+            right: 10px;
+            top: 37px;
+        }
+
+        .rc-anchor-checkbox-label {
+            font-family: Roboto, helvetica, arial, sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 17px;
+            left: 50px;
+            top: 26px;
+            position: absolute;
+            color: black;
+        }
+
+        .rc-anchor .rc-anchor-normal .rc-anchor-light {
+            border: none;
+        }
+
+        .rc-anchor-pt {
+            color: #9b9b9b;
+            font-family: Roboto, helvetica, arial, sans-serif;
+            font-size: 8px;
+            font-weight: 400;
+            right: 10px;
+            top: 53px;
+            position: absolute;
+        }
+
+        .rc-anchor-pt a:link {
+            color: #9b9b9b;
+            text-decoration: none;
+        }
+
+        .g-recaptcha {
+            width: 41px;
+            /* border: 1px solid red; */
+            height: 38px;
+            overflow: hidden;
+            float: left;
+            margin-top: 16px;
+            margin-left: 6px;
+        }
+
+        .g-recaptcha>div {
+            width: 46px;
+            height: 30px;
+            /*background-color: #F9F9F9;*/
+            overflow: hidden;
+            border: 1px solid red;
+            transform: translate3d(-8px, -19px, 0px);
+        }
+
+        .g-recaptcha div {
+            border: 0;
+        }
+
+        {% endif %}
+
+        .socialimg {
+            height: 34px;
+        }
+
+        .responsive-img {
+            max-width: 86% !important;
+        }
+
+        .white {
+            margin-top: -34px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body class="loginbody">
+    <!--{%include '_partials/_preloader.html' %}-->
+    <div class="centered">
+        <div class="white s10 l4 m10 ">
+            <div style="padding: 32px 36px 0px 36px; border: 1px solid #EEE;">
+                <div class="center">
+                    <img class="responsive-img " style="margin-bottom:10px;max-height: 100px;width: auto" src="/static/images/None/fynd_logo .png"
+                    />
+                </div>
+                <div class='row-pad messagebox'>
+                    <div class='col s12' style="margin-bottom: 20px;">
+                        <p class="center-align" id="message"></p>
+                    </div>
+                </div>
+                <form class="col s12" method="post" action="{% url 'FyndApp:login_user' %}" id="loginform">{% csrf_token %}
+
+                    <div class='row-pad'>        
+                        <div class="col m12 s12 l12">
+                            <div class='input-field col l12 s12'>
+                                <input name="username" tabindex="1" class='validate' type='email' name='username' id='email' title="Email" />
+                                <label for='email' class="label-align active">Enter your email</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row-pad'>
+                        <div class="col m12 s12 l12">
+                            <div class='input-field col l12 s12'>
+                                <input class='validate' tabindex="2" name='password' id='password' type="password" title="Password" value="" />
+                                <label for='password' class="active label-align">Enter your password</label>
+                            </div>
+                        </div>
+                    </div>    
+                    <br />
+                    <center>
+                        <div class='row'>
+                            <button type='submit' tabindex="3" style="height: 45px" name='btn_login' class='col s12 btn btn-large waves-effect '>Login</button>
+                        </div>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        $('.tooltipped').tooltip({
+            delay: 50
+        });
+    });
+    $(function () {
+        $.ajax({
+            url: "https://perk.brio.co.in/api/BingImageURL",
+            datatype: "json",
+            success: function (data) {
+                $('.loginbody').css('background-image', 'url(' + data[0].bingURL + ')', 'opacity', '1');
+            }
+        });
+    })
+
+    {% if messages %}
+        {% for msg in messages %}
+            $('#message').html('{{msg}}').addClass('{{msg.tags}}')
+            Materialize.toast('{{msg}}', 5000)
+        {% endfor %}
+    {% endif %}
+    //document.getElementById('token').value = new Fingerprint().get();
+    var social = [
+        'adn',
+        'bitbucket',
+        'dropbox',
+        'facebook',
+        'flickr',
+        'foursquare',
+        'github',
+        'google',
+        'instagram',
+        'linkedin',
+        'windows ',
+        'odnoklassniki',
+        'openid',
+        'pinterest',
+        'reddit',
+        'soundcloud',
+        'tumblr',
+        'twitter',
+        'vimeo',
+        'vk',
+        'yahoo'
+    ]
+    var buttons = '';
+    $.each(social, function (index, network) {
+        buttons += '<div class="row usage ' + network + '"><a class="waves-effect waves-light btn social col s12 ' + network + '"><i class="fa fa-fw fa-' + network + '"></i> Sign in with ' + network + '</a></div>'
+    });
+    $('.all').html(buttons);
+    var current = 'google';
+    $('.usage').on('mouseenter', function () {
+        var icon = $(this).attr('class').replace('row usage ', '');
+        var regex = new RegExp(current, "gi");
+        $('.examples').html(function (index, html) {
+            return html.replace(regex, icon);
+        });
+        current = icon;
+    })
+        //$('.example').html(html)
+
+</script>
+
+</html>

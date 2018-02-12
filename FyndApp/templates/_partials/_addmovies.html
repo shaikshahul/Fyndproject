@@ -6,10 +6,10 @@
     <td>{{movie.popularity}}</td>
     <td>{{movie.score}}</td>   
     <td>{{movie.genre}}</td>
-    <td data-value="{{movie.id}}"><a href="#" class="tooltipped movietooltip" data-position="bottom" data-delay="50"
+    <td data-value="{{movie.id}}"><a href="#" class="tooltipped movie_edit" data-position="bottom" data-delay="50"
             data-tooltip="moviedetails"><i  class="material-icons dp48 get_movie" >mode_edit</i></a></td>
-    <td data-value="{{movie.id}}"><a href="#" class="tooltipped deletemovietooltip" data-position="bottom" data-delay="50"
-            data-tooltip="delete movie"><i class="material-icons dp48 delete_movie" >delete</i></a></td>
+    <td data-value="{{movie.id}}"><a href="#" class="tooltipped delete_movie" data-position="bottom" data-delay="50"
+            data-tooltip="delete movie"><i class="material-icons dp48 " >delete</i></a></td>
 </tr>
 {% endfor %}
 {% else %}
