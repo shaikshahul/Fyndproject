@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'FyndProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'fynd_mysql',
         'USER': 'root',
         'PASSWORD': 'root',
