@@ -3,6 +3,7 @@ from FyndApp.models import Movies
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib.auth.decorators import login_required, permission_required
+from datetime import datetime
 
 
 
@@ -46,7 +47,7 @@ def movies(request):
         movobj.country = country
         movobj.youtube = youtube_url
         movobj.storyline = storyline
-        movobj.release_date = releasedate
+        movobj.release_date = datetime.now().date()
         movobj.save()
         movie_content = render(
                 request, '_partials/_addmovies.html', {'movie_obj': [movobj]}).content
