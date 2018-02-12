@@ -3,7 +3,7 @@ from FyndApp.Views.dashboard import dashboard,view_movies_deatils,search_movies
 from FyndApp.Views.addmovies import movies,movie_edit
 from FyndApp.Views.loginpage import signup,logout_user,login_user
 
-
+app_name="FyndApp"
 
 urlpatterns = [
     url(r'^$', dashboard, name='dashboard'),
