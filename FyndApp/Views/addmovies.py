@@ -47,8 +47,7 @@ def movies(request):
         movobj.country = country
         movobj.youtube = youtube_url
         movobj.storyline = storyline
-        movobj.release_date = datetime.datetime.strptime(
-                releasedate, "%Y-%m-%d").date()
+        movobj.release_date = releasedate
         movobj.save()
         return redirect('/movies/')
         # movie_content = render(
