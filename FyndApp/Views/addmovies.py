@@ -24,7 +24,7 @@ def movies(request):
         youtube = request.POST.get('youtube')
         storyline = request.POST.get('storyline')
         image = request.FILES.get('image')
-        releasedate =  request.POST.get('releasedate')
+        releasedate =  request.POST.get('release_date')
         genre = request.POST.get('genre')
         ytube = youtube.split('=')
         if len(ytube) == 2:
@@ -47,7 +47,8 @@ def movies(request):
         movobj.country = country
         movobj.youtube = youtube_url
         movobj.storyline = storyline
-        movobj.release_date = str(releasedate)
+        movobj.release_date = datetime.strptime(
+                releasedate, "%Y-%m-%d").date()
         movobj.save()
         return redirect('/movies/')
         # movie_content = render(
