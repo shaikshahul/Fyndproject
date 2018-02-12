@@ -38,11 +38,11 @@ def search_movies(request):
                                          Q(language__icontains=searchtext)|
                                          Q(release_date__icontains=searchtext)
                                         )
-        resp = map(lambda x: {'id': x.pk, 'value':x.name,
+        resp =list(map(lambda x: {'id': x.pk, 'value':x.name,
                               'director':x.director,
                               'genre':x.genre,
                               'language':x.language,
-                              'year':x.release_date.year}, queryobj)
+                              'year':x.release_date.year}, queryobj))
         if resp == []:
             return JsonResponse({'error':''})
         return JsonResponse(dumps(resp), safe=False)
