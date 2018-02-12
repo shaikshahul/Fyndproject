@@ -3,7 +3,7 @@ from FyndApp.models import Movies
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib.auth.decorators import login_required, permission_required
-from datetime import datetime,strptime
+from datetime import datetime
 
 
 
