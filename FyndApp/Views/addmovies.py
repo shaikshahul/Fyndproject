@@ -49,9 +49,10 @@ def movies(request):
         movobj.storyline = storyline
         movobj.release_date = releasedate
         movobj.save()
-        movie_content = render(
-                request, '_partials/_addmovies.html', {'movie_obj': [movobj]}).content
-        return JsonResponse({'moviobj': movobj.id, 'movie_content': movie_content})
+        return redirect('/movies/')
+        # movie_content = render(
+        #         request, '_partials/_addmovies.html', {'movie_obj': [movobj]}).content
+        # return JsonResponse({'moviobj': movobj.id, 'movie_content': movie_content})
 
         
 @login_required(login_url='/login')
