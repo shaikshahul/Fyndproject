@@ -1,2 +1,2 @@
-web: gunicorn Fyndproject.wsgi --log-file -
+web: gunicorn FyndProject.wsgi --log-file -
 worker: python worker.py
